@@ -4,6 +4,7 @@
 //! default Python emulator, `emu`.
 
 use std::num::Wrapping;
+use std::io::{BufWriter, Write};
 
 /// Implements the CPU, and keeps track of its state.
 pub struct Cpu {
@@ -39,25 +40,27 @@ impl Cpu {
     /// ins.execute(self);
     /// ```
     pub fn run(&mut self) {
+        let mut out = BufWriter::new(std::io::stdout());
         loop {
-            self.dump_state();
+            self.dump_state(&mut out);
             let ins = Instruction::new(self.mem[self.regs.r_p.0 as usize]);
             let prev_r_p = self.regs.r_p;
             self.regs.r_p += Wrapping(1);
             ins.execute(self);
             if prev_r_p == self.regs.r_p {
-                println!("Detected forever loop, halting CPU.");
+                writeln!(out, "Detected forever loop, halting CPU.").unwrap();
+                out.flush().unwrap();
                 return;
             }
         }
     }
 
     /// Print out the state of the CPU registers.
-    fn dump_state(&self) {
-        print!("A = {:02x}, ", self.regs.r_a);
-        print!("B = {:02x}, ", self.regs.r_b);
-        print!("M = {:02x}, ", self.regs.r_m);
-        println!("P = {:02x}", self.regs.r_p);
+    fn dump_state(&self, output_stream: &mut impl Write) {
+        write!(output_stream, "A = {:02x}, ", self.regs.r_a).unwrap();
+        write!(output_stream, "B = {:02x}, ", self.regs.r_b).unwrap();
+        write!(output_stream, "M = {:02x}, ", self.regs.r_m).unwrap();
+        writeln!(output_stream, "P = {:02x}", self.regs.r_p).unwrap();
     }
 }
 
