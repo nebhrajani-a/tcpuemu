@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Opcode","Opcode for each instruction type."]],"struct":[["Cpu","Implements the CPU, and keeps track of its state."],["Instruction","Implements the decoding and execution of each instruction opcode."],["Registers","Contains the four registers of TinyCPU. These are intended to wrap — some assembly programs rely on this behavior."]]});
