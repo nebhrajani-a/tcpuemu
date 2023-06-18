@@ -23,6 +23,7 @@ fn main() {
         Err(message) => panic!("{message}: {filename}"),
     };
     let mem_init = mem_init.into_iter().map(Wrapping).collect();
+    mem_init.resize(0x100, 0);
 
     let mut cpu = Cpu::new(Some(mem_init));
     cpu.run();
