@@ -1,1 +1,8 @@
 [[https://nebhrajani-a.org/tcpuemu/tcpuemu/][Documentation]].
+
+To run a sample program, do:
+#+begin_src sh
+  cargo build --release
+  asm/tcpu_assembler asm/compute_128.s
+  target/release/tcpuemu a.out
+#+end_src
